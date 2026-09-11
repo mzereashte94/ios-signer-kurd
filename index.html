@@ -49,7 +49,7 @@
     .app { display: flex; justify-content: space-between; align-items: center; padding: 14px; margin-bottom: 12px; border-radius: 18px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.05); }
     .app-icon { width: 60px; height: 60px; border-radius: 14px; background-size: cover; background-position: center; border: 2px solid rgba(245, 158, 11, 0.5); }
     
-    .install { padding: 7px 15px; min-width: 95px; text-align: center; border-radius: 20px; background: linear-gradient(135deg,#f59e0b,#92400e); font-size: 13px; font-weight: 900; cursor: pointer; color: white; border: none; height: 35px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .install { padding: 7px 15px; min-width: 95px; text-align: center; border-radius: 20px; background: linear-gradient(135deg,#f59e0b,#92400e); font-size: 13px; font-weight: 900; cursor: pointer; color: white; border: none; height: 35px; display: flex; align-items: center; justify-content: center; }
 
     .important-note { text-align: center; padding: 20px; margin: 20px 0; background: rgba(245, 158, 11, 0.05); border-right: 4px solid #f59e0b; border-left: 4px solid #f59e0b; border-radius: 15px; line-height: 1.8; font-size: 14px; color: #fcd34d; }
 
@@ -125,7 +125,11 @@
     </div>
 
 <script>
-    const MY_REPO = "https://github.com/mzereashte94/ios-signer-kurd/releases/download/V3/";
+    const GITHUB_USER = "mzereashte94";
+    const GITHUB_REPO = "ios-signer-kurd";
+    const GITHUB_TOKEN = "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"; // تۆکنەکەت لێرەدا بە سەرکەوتوویی جێگیر کرا
+
+    const MY_REPO = "https://github.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/releases/download/V3/";
     const OLD_REPO = "https://github.com/ipasoon/ipasoon-install/releases/download/3/";
 
     const certs = {
@@ -167,7 +171,7 @@
         "AnimeSlayer": { link: OLD_REPO + "Anime.Slayer.ipa" },
         "Andalusi": { link: OLD_REPO + "Andalusi.ipa" },
         "Swiftgram": { link: OLD_REPO + "Swiftgram_Telegram.ipa" },
-        "Photoroom": { link: OLD_REPO + "Photoroom.ipa" },
+        "Photoroom": { link: OLD_REPO + "Photoroom.app" },
         "X": { link: OLD_REPO + "X.ipa" },
         "CapCut": { link: OLD_REPO + "CapCut_12.0_Cracked.ipa" },
         "VideoStar": { link: OLD_REPO + "Video-Star.ipa" },
@@ -229,20 +233,68 @@
         } catch (e) { alert("Please use Safari."); } finally { btn.innerText = translations[currentLang].download; }
     }
 
-    // لێرەدا دوگمەی دامەزراندن ڕاستەوخۆ دەبەسترێتەوە بە داگرتنی فایلی IPA
-    function handleInstall(appNameEng, certKey, event) {
+    async function handleInstall(appNameEng, certKey, event) {
         const selectedApp = appData[appNameEng];
-        if (selectedApp && selectedApp.link) {
-            window.location.href = selectedApp.link;
-        } else {
-            alert("Link not available");
+        const selectedCert = certs[certKey];
+        if (!selectedApp || !selectedCert) return alert("Error in data");
+
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "جاری ساینکردن...";
+        btn.disabled = true;
+
+        try {
+            const toBase64 = async (url) => {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.readAsDataURL(blob);
+                });
+            };
+
+            const p12Base64 = await toBase64(selectedCert.p12);
+            const provBase64 = await toBase64(selectedCert.mp);
+
+            const githubUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/actions/workflows/sign.yml/dispatches`;
+            
+            const res = await fetch(githubUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token ' + GITHUB_TOKEN,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ref: 'main',
+                    inputs: {
+                        ipa_url: selectedApp.link,
+                        p12_base64: p12Base64,
+                        p12_password: "alikareemsafi",
+                        provision_base64: provBase64
+                    }
+                })
+            });
+
+            if (res.ok) {
+                alert("بە سەرکەوتوویی داواکارییەکە نێردرا بۆ گیتھەب بۆ ساینکردن! چەند چرکەیەک چاوەڕێ بکە و پاشان لە بەشی Actions لە گیتھەبەکەت فایلی واژۆکراو دابەزێنە.");
+            } else {
+                alert("هەڵە ڕویدا لە ناردنی داواکاری بۆ گیتھەب.");
+            }
+        } catch (e) {
+            alert("کێشە لە پەیوەندی هەیە.");
+            console.error(e);
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
         }
     }
 
     let currentLang = 'ku';
     const translations = {
         ku: { 
-            dnsBtn: "دامەزراندنی DNS", dnsInfo: "پێش کرتەکردن لەم دوگمەیە، پێویستە ماڵپەڕەکە لە وێبگەڕی سەفاری (Safari) بکەیتەوە", creatorName: "Kurd Signer", creatorSub: "گەشەپێدەری باوەڕپێکراو بۆ بڕوانامە فەرمییەکان", install: "داگرتن", download: "داگرتن",
+            dnsBtn: "دامەزراندنی DNS", dnsInfo: "پێش کرتەکردن لەم دوگمەیە، پێویستە ماڵپەڕەکە لە وێبگەڕی سەفاری (Safari) بکەیتەوە", creatorName: "Kurd Signer", creatorSub: "گەشەپێدەری باوەڕپێکراو بۆ بڕوانامە فەرمییەکان", install: "ساینکردن", download: "داگرتن",
             mainNote: "⚠️ <b>ئاگاداری گرنگ:</b> ئەگەر دوای دامەزراندن ئەپەکان کاریان نەکرد، مانای وایە ئامێرەکەت چووەتە لیستی ڕەشەوە (Blacklisted). پێویستە <b>بڕوانامەی فەرمی</b> بکڕیت.",
             contactBtn: "پەیوەندیمان پێوە بکە",
             contactNote: "تێبینی: نامە ناردن تەنها بۆ کڕینی بڕوانامەی فەرمییە، پرسیاری تر دەربارەی بابەتەکانی تر وەڵام نادرێتەوە.",
@@ -250,7 +302,7 @@
             appNames: { "الشهادة": "فایلی بڕوانامە", "سينمانا": "Cinemana", "يوتيوب": "YouTube Plus", "نتفلكس": "Netflix", "بيكرام": "Bikram", "هونستا": "Honista", "تيك توك": "TikTok", "فودو": "Vodu", "قراند": "GTA San Andreas", "ماين كرافت": "Minecraft", "انسايد": "Inside", "فيسبوك": "Facebook Glow", "لايتروم": "Lightroom", "انمي كلاود": "Anime Cloud", "كلاش": "Clash", "هاي تي في": "HiTV", "بيكس ارت": "Picsart", "انمي سلاير": "Anime Slayer", "اندلسي": "Andalusi", "سويفت جرام": "Swiftgram", "فوتو روم": "Photoroom", "تويتر": "X App", "كاب كات": "CapCut", "فيديو ستار": "Video Star", "ايساين": "ESign", "جي بوكس": "GBox", "سكارلت": "Scarlet", "الريشة": "Feather", "كيساين": "KSign" } 
         },
         ar: { 
-            dnsBtn: "تثبيت DNS", dnsInfo: "يجب فتح الموقع في سفاري قبل ان تضغط على زر ال DNS", creatorName: "Kurd Signer", creatorSub: "المطور المعتمد لخدمات الشهادات الرسمية", install: "تنزيل", download: "تنزيل",
+            dnsBtn: "تثبيت DNS", dnsInfo: "يجب فتح الموقع في سفاري قبل ان تضغط على زر ال DNS", creatorName: "Kurd Signer", creatorSub: "المطور المعتمد لخدمات الشهادات الرسمية", install: "توقيع", download: "تنزيل",
             mainNote: "⚠️ <b>تنبيه هام:</b> إذا واجهت مشكلة في تشغيل التطبيقات بعد التثبيت، فهذا يعني أن جهازك مدرج ضمن القائمة السوداء. نوصيك بشراء <b>شهادة رسمية موثوقة</b> من المطور المعتمد.",
             contactBtn: "تواصل معنا",
             contactNote: "ملاحظة: المراسلة مخصصة فقط لمن يرغب في شراء شهادة رسمية، أي رسالة أخرى حول مواضيع مختلفة سيتم أرشفتها ولن يتم الرد عليها.",
@@ -258,12 +310,12 @@
             appNames: { "الشهادة": "ملف الشهادة", "سينمانا": "سينمانا", "يوتيوب": "يوتيوب بلس", "نتفلكس": "نتفلكس", "بيكرام": "بيكرام", "هونستا": "هونستا", "تيك توك": "تيك توك", "فودو": "فودو", "قراند": "GTA San Andreas", "ماين كرافت": "ماين كرافت", "انسايد": "Inside", "فيسبوك": "Facebook Glow", "لايتروم": "Lightroom", "انمي كلاود": "Anime Cloud", "كلاش": "Clash", "هاي تي في": "HiTV", "بيكس ارت": "Picsart", "انمي سلاير": "Anime Slayer", "اندلسي": "Andalusi", "سويفت جرام": "Swiftgram", "فوتو روم": "Photoroom", "تويتر": "تطبيق X", "كاب كات": "كاب كات", "فيديو ستار": "Video Star", "ايساين": "ايساين", "جي بوكس": "جي بوكس", "سكارلت": "سكارلت", "الريشة": "الريشة", "كيساين": "كيساين" } 
         },
         en: { 
-            dnsBtn: "Install DNS", dnsInfo: "Open in Safari before clicking the DNS button", creatorName: "Kurd Signer", creatorSub: "Official Certificate Authorized Developer", install: "Download", download: "Download",
+            dnsBtn: "Install DNS", dnsInfo: "Open in Safari before clicking the DNS button", creatorName: "Kurd Signer", creatorSub: "Official Certificate Authorized Developer", install: "Sign", download: "Download",
             mainNote: "⚠️ <b>Warning:</b> If apps fail to launch after installation, your device is Blacklisted. To fix this, we recommend purchasing an <b>Official Certificate</b>.",
             contactBtn: "Contact Us",
             contactNote: "Note: Messaging is for certificate purchases only. Other topics will be archived and ignored.",
             cats: ['All', 'Apps', 'E-Sign', 'KSign', 'GBox', 'Scarlet', 'Feather'], 
-            appNames: { "الشهادة": "Cert File", "سينمانا": "Cinemana", "يوتيوب": "YouTube Plus", "نتفلكس": "Netflix", "بيكرام": "Bikram", "هونستا": "Honista", "تيك توك": "TikTok", "Vodu": "Vodu", "GTA": "GTA San Andreas", "Minecraft": "Minecraft", "Inside": "Inside", "Facebook": "Facebook Glow", "Lightroom": "Lightroom", "AnimeCloud": "Anime Cloud", "Clash": "Clash", "HiTV": "HiTV", "Picsart": "Picsart", "AnimeSlayer": "Anime Slayer", "Andalusi": "Andalusi", "Swiftgram": "Swiftgram", "Photoroom": "Photoroom", "X": "X App", "CapCut": "CapCut", "VideoStar": "Video Star", "ESign": "E-Sign", "GBox": "GBox", "Scarlet": "Scarlet", "Feather": "Feather", "KSign": "KSign" } 
+            appNames: { "الشهادة": "Cert File", "سينمانا": "Cinemana", "يوتيوب": "YouTube Plus", "Netflix": "Netflix", "Bikram": "Bikram", "Honista": "Honista", "TikTok": "TikTok", "Vodu": "Vodu", "GTA": "GTA San Andreas", "Minecraft": "Minecraft", "Inside": "Inside", "Facebook": "Facebook Glow", "Lightroom": "Lightroom", "AnimeCloud": "Anime Cloud", "Clash": "Clash", "HiTV": "HiTV", "Picsart": "Picsart", "AnimeSlayer": "Anime Slayer", "Andalusi": "Andalusi", "Swiftgram": "Swiftgram", "Photoroom": "Photoroom", "X": "X App", "CapCut": "CapCut", "VideoStar": "Video Star", "ESign": "E-Sign", "GBox": "GBox", "Scarlet": "Scarlet", "Feather": "Feather", "KSign": "KSign" } 
         }
     };
 
