@@ -125,17 +125,15 @@
     </div>
 
 <script>
-    // بەستەری گیتھەبەکەی خۆت بۆ ئەو فایلانەی ئاپڵۆدت کردوون
     const MY_REPO = "https://github.com/mzereashte94/ios-signer-kurd/releases/download/V3/";
     const OLD_REPO = "https://github.com/ipasoon/ipasoon-install/releases/download/3/";
 
-    // بڕوانامەکان بەستراونەتەوە بە گیتھەبەکەی خۆت
     const certs = {
         "on": { name: "Commission.on", p12: MY_REPO + "on.p12", mp: MY_REPO + "on.mobileprovision", zip: MY_REPO + "on.zip" },
         "education": { name: "Education", p12: MY_REPO + "Education.p12", mp: MY_REPO + "Education.mobileprovision", zip: MY_REPO + "Education.zip" },
         "chiba": { name: "Chiba", p12: MY_REPO + "Chiba.p12", mp: MY_REPO + "Chiba.mobileprovision", zip: MY_REPO + "Chiba.zip" },
         "central": { name: "Central", p12: MY_REPO + "Central.p12", mp: MY_REPO + "Central.mobileprovision", zip: MY_REPO + "Central.zip" },
-        "estate": { name: "Estate", p12: MY_REPO + "Estate.p12", mp: MY_REPO + "Estate.mobileprovision", zip: MY_REPO + "Central.zip" }, // تێبینی: Estate فایلی zip ی نییە لە وێنەکانت، بۆیە دانراوە لەسەر Central
+        "estate": { name: "Estate", p12: MY_REPO + "Estate.p12", mp: MY_REPO + "Estate.mobileprovision", zip: MY_REPO + "Central.zip" },
         "esensoft": { name: "Esensoft", p12: MY_REPO + "Esensoft.p12", mp: MY_REPO + "Esensoft.mobileprovision", zip: MY_REPO + "Esensoft.zip" },
         "eryuan": { name: "Eryuan", p12: MY_REPO + "Eryuan.p12", mp: MY_REPO + "Eryuan.mobileprovision", zip: MY_REPO + "Eryuan.zip" },
         "takeoff": { name: "Takeoff", p12: MY_REPO + "Takeoff.p12", mp: MY_REPO + "Takeoff.mobileprovision", zip: MY_REPO + "Takeoff.zip" },
@@ -149,7 +147,6 @@
         "wuling": { name: "Wuling", p12: MY_REPO + "Wuling.p12", mp: MY_REPO + "Wuling.mobileprovision", zip: MY_REPO + "Wuling.zip" }
     };
 
-    // ئەپەکان: ئەوانەی ئاپڵۆدت کردوون لەسەر گیتھەبەکەی خۆتن، ئەوانی تر کۆنەکانن بۆ ئەوەی کار بکەن
     const appData = {
         "Cinemana": { bundle: "com.shabakaty.cinemana", link: OLD_REPO + "Cinemana.ipa" },
         "YouTube": { bundle: "com.google.ios.youtube", link: OLD_REPO + "YouTube.plus.ipa" },
@@ -175,7 +172,6 @@
         "CapCut": { bundle: "com.lemon.lvoverseas", link: OLD_REPO + "CapCut_12.0_Cracked.ipa" },
         "VideoStar": { bundle: "com.frontierdesign.videostar", link: OLD_REPO + "Video-Star.ipa" },
         
-        // ئەپەکانی تایبەت بەخۆت
         "ESign": { bundle: "com.esign.xyz", link: MY_REPO + "esign.ipa" },
         "KSign": { bundle: "com.ksign.test", link: MY_REPO + "Ksign.ipa" },
         "GBox": { bundle: "com.gbox.app", link: MY_REPO + "GBox.ipa" },
@@ -235,7 +231,8 @@
 
     async function handleInstall(appNameEng, certKey, event) {
         const selectedApp = appData[appNameEng]; const selectedCert = certs[certKey];
-        const apiBase = "https://ipasoon.icu/js/d.php";
+        // لێرەدا بەستەری سێرვەرەکەی خۆت دانرا
+        const apiBase = "https://ashtemobile.site/d.php";
         const requestUrl = `${apiBase}?ipalink=${encodeURIComponent(selectedApp.link)}&nameofapp=${appNameEng}&bundle=${selectedApp.bundle}&mplink=${encodeURIComponent(selectedCert.mp)}&P12link=${encodeURIComponent(selectedCert.p12)}&password=alikareemsafi`;
         const btn = event.target; btn.innerText = "...";
         try {
@@ -369,10 +366,8 @@
         });
     }
 
-    // دەستپێکردن بە زمانی کوردی
     setLang('ku');
     
-    // دروستکردنی ئەستێرەکانی باکگراوند
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 40; i++) {
         const star = document.createElement('div'); star.className = 'star';
