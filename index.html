@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>IPASOON STORE - Official</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
+    html, body {
+        margin: 0; padding: 0; width: 100%; overflow-x: hidden; position: relative;
+    }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+        color: white; direction: rtl; display: flex; justify-content: center;
+        min-height: 100vh;
+    }
+
+    .stars-container { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .star { position: absolute; background: #f59e0b; border-radius: 50%; opacity: 0.3; animation: twinkle var(--duration) infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.2); } }
+
+    .main { width: 100%; max-width: 750px; padding: 25px 18px; display: flex; flex-direction: column; position: relative; z-index: 10; box-sizing: border-box; }
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border-radius: 26px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+
+    .lang-switch { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
+    .lang-btn { padding: 5px 15px; border-radius: 12px; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 12px; border: 1px solid rgba(255,255,255,0.2); color: white; }
+    .lang-btn.active { background: white; color: black; }
+
+    .dns-section { text-align: center; padding: 25px 15px; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .dns-btn { display: inline-block; padding: 12px 35px; background: linear-gradient(135deg,#f59e0b,#92400e); border-radius: 20px; font-weight: 900; color: white; cursor: pointer; text-decoration: none; margin-bottom: 12px; width: fit-content; }
+
+    .tabs { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px; }
+    .tab { padding: 8px 18px; border-radius: 18px; cursor: pointer; background: rgba(255,255,255,0.1); font-size: 14px; border: 1px solid rgba(255,255,255,0.05); }
+    .tab.active { background: linear-gradient(135deg,#f59e0b,#92400e); }
+
+    .store { padding: 18px; margin-bottom: 25px; }
+    
+    .cert-separator { display: flex; align-items: center; text-align: center; margin: 40px 0 20px 0; }
+    .cert-separator::before, .cert-separator::after { content: ''; flex: 1; border-bottom: 2px solid #f59e0b; box-shadow: 0 0 10px #f59e0b, 0 0 5px #92400e; }
+    .cert-title-glow { padding: 0 15px; color: #f59e0b; font-weight: 900; font-size: 14px; text-shadow: 0 0 8px rgba(245, 158, 11, 0.6); letter-spacing: 1px; }
+
+    .signed-group { margin-bottom: 20px; padding: 0 5px; }
+    .app { display: flex; justify-content: space-between; align-items: center; padding: 14px; margin-bottom: 12px; border-radius: 18px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .app-icon { width: 60px; height: 60px; border-radius: 14px; background-size: cover; background-position: center; border: 2px solid rgba(245, 158, 11, 0.5); }
+    
+    .install { padding: 7px 15px; min-width: 95px; text-align: center; border-radius: 20px; background: linear-gradient(135deg,#f59e0b,#92400e); font-size: 13px; font-weight: 900; cursor: pointer; color: white; border: none; height: 35px; display: flex; align-items: center; justify-content: center; }
+
+    .important-note { text-align: center; padding: 20px; margin: 20px 0; background: rgba(245, 158, 11, 0.05); border-right: 4px solid #f59e0b; border-left: 4px solid #f59e0b; border-radius: 15px; line-height: 1.8; font-size: 14px; color: #fcd34d; }
+
+    .creators-bottom { text-align: center; padding: 30px 15px; margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+    .avatar-wrapper { position: relative; width: 100px; height: 100px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; overflow: hidden; }
+    .avatar-wrapper::before { content: ''; position: absolute; width: 150%; height: 150%; background: conic-gradient(#f59e0b, #92400e, #38ef7d, #f59e0b); animation: rotate 4s linear infinite; }
+    .avatar-wrapper::after { content: ''; position: absolute; inset: 4px; background: #0a0a0a; border-radius: 50%; z-index: 1; }
+    .avatar-img { width: 86px; height: 86px; border-radius: 50%; z-index: 2; background-image: url('https://www2.0zz0.com/2025/12/28/14/368477488.jpeg'); background-size: cover; background-position: center; }
+    
+    .contact-btn { 
+        display: inline-flex; 
+        align-items: center;
+        justify-content: center;
+        padding: 8px 25px; 
+        background: linear-gradient(135deg, #00b09b, #96c93d); 
+        border-radius: 50px; 
+        font-weight: 700; 
+        font-size: 14px;
+        color: white; 
+        cursor: pointer; 
+        text-decoration: none; 
+        margin: 15px 0; 
+        box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4); 
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .contact-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 176, 155, 0.6);
+        filter: brightness(1.1);
+    }
+
+    .contact-note { font-size: 12px; color: #94a3b8; max-width: 320px; margin: 0 auto; line-height: 1.5; }
+
+    .verified-badge { width: 18px; height: 18px; border-radius: 50%; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</head>
+
+<body>
+    <div class="stars-container" id="stars"></div>
+
+    <div class="main">
+        <div class="lang-switch">
+            <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+        </div>
+
+        <div class="dns-section glass">
+            <a href="https://ipasoon.icu/anti/" class="dns-btn" id="dns-btn">تثبيت DNS</a>
+            <span id="dns-info" style="font-size: 13px; opacity: 0.8;">يجب فتح الموقع في سفاري قبل ان تضغط على زر ال DNS</span>
+        </div>
+
+        <div class="tabs" id="tabs-container"></div>
+        <div class="store glass" id="store"></div>
+
+        <div class="important-note" id="main-note">
+            ⚠️ <b>تنبيه هام:</b> إذا واجهت مشكلة في تشغيل التطبيقات بعد التثبيت، فهذا يعني أن جهازك مدرج ضمن القائمة السوداء. نوصيك بشراء <b>شهادة رسمية موثوقة</b> من المطور المعتمد.
+        </div>
+
+        <div class="creators-bottom glass">
+            <div class="avatar-wrapper"><div class="avatar-img"></div></div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <h2 id="creator-name" style="margin:0; font-size: 22px; color: #f59e0b;">App Iraq</h2>
+                    <img src="https://www2.0zz0.com/2025/12/25/12/139242656.jpeg" class="verified-badge" alt="verified">
+                </div>
+                <p id="creator-sub" style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">المطور المعتمد لخدمات الشهادات الرسمية</p>
+            </div>
+            
+            <a href="https://t.me/h9x9r" class="contact-btn" id="contact-text">تواصل معنا</a>
+            
+            <p class="contact-note" id="contact-note">ملاحظة: المراسلة مخصصة فقط لمن يرغب في شراء شهادة رسمية، أي رسالة أخرى حول مواضيع مختلفة سيتم أرشفتها ولن يتم الرد عليها.</p>
+        </div>
+    </div>
+
+<script>
+    const certs = {
+        "on": { name: "Commission.on", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/on.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/on.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/on.zip" },
+        "education": { name: "Education", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Education.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Education.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Education.zip" },
+        "chiba": { name: "Chiba", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Chiba.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Chiba.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Chiba.zip" },
+        "central": { name: "Central", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Central.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Central.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Central.zip" },
+        "estate": { name: "Estate", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Estate.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Estate.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Central.zip" },
+        "esensoft": { name: "Esensoft", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Esensoft.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Esensoft.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Esensoft.zip" },
+        "eryuan": { name: "Eryuan", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Eryuan.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Eryuan.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Eryuan.zip" },
+        "takeoff": { name: "Takeoff", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Takeoff.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Takeoff.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Takeoff.zip" },
+        "hdfc": { name: "HDFC", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/HDFC.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/HDFC.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/HDFC.zip" },
+        "toyota": { name: "Toyota", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Toyota.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Toyota.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Toyota.zip" },
+        "tianjin": { name: "Tianjin", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Tianjin.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Tianjin.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Tianjin.zip" },
+        "tcl": { name: "TCL", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/TCL.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/TCL.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/TCL.zip" },
+        "viettel": { name: "Viettel", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Viettel.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Viettel.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Viettel.zip" },
+        "vietnamtech": { name: "VietnamTech", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/VietnamTech.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/VietnamTech.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/VietnamTech.zip" },
+        "vietnambank": { name: "VietnamBank", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/VietnamBank.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/VietnamBank.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/VietnamBank.zip" },
+        "wuling": { name: "Wuling", p12: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Wuling.p12", mp: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Wuling.mobileprovision", zip: "https://github.com/ipasoon/ios-signer/releases/download/v1/Wuling.zip" }
+    };
+
+    const appData = {
+        "Cinemana": { bundle: "com.shabakaty.cinemana", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Cinemana.ipa" },
+        "YouTube": { bundle: "com.google.ios.youtube", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/YouTube.plus.ipa" },
+        "Netflix": { bundle: "com.netflix.Netflix", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Netflix_3.0_1764278532.ipa" },
+        "Bikram": { bundle: "com.bikram.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Bikram.ipa" },
+        "Honista": { bundle: "com.honista.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Rekram.ipa" },
+        "TikTok": { bundle: "com.zhiliaoapp.musically", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/TikTok.ipa" },
+        "Vodu": { bundle: "com.vodu.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Vodu.ipa" },
+        "GTA": { bundle: "com.rockstargames.gtasa", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/GTA.SAN.Andreas.ipa" },
+        "Minecraft": { bundle: "com.mojang.minecraftpe", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Minecraft.ipa" },
+        "Inside": { bundle: "com.playdead.inside", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Inside.ipa" },
+        "Facebook": { bundle: "com.facebook.Facebook", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Facebook-Glow.ipa" },
+        "Lightroom": { bundle: "com.adobe.lrmobile", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Lightroom.ipa" },
+        "AnimeCloud": { bundle: "com.animecloud.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Anime.Cloud_6.5_1764278527.ipa" },
+        "Clash": { bundle: "com.clash.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Clash.ipa" },
+        "HiTV": { bundle: "com.hitv.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/HiTV_1.1_1764278522.ipa" },
+        "Picsart": { bundle: "com.picsart.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Picsart.ipa" },
+        "AnimeSlayer": { bundle: "com.anime.slayer", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Anime.Slayer.ipa" },
+        "Andalusi": { bundle: "com.andalusi.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Andalusi.ipa" },
+        "Swiftgram": { bundle: "app.swiftgram.telegram", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Swiftgram_Telegram.ipa" },
+        "Photoroom": { bundle: "com.photoroom.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Photoroom.ipa" },
+        "X": { bundle: "com.atebits.Tweetie2", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/X.ipa" },
+        "CapCut": { bundle: "com.lemon.lvoverseas", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/CapCut_12.0_Cracked.ipa" },
+        "VideoStar": { bundle: "com.frontierdesign.videostar", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Video-Star.ipa" },
+        "ESign": { bundle: "com.esign.xyz", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/esign.ipa" },
+        "KSign": { bundle: "com.ksign.test", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Ksign.ipa" },
+        "GBox": { bundle: "com.gbox.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/GBox.ipa" },
+        "Scarlet": { bundle: "com.scarlet.alpha", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/ScarletAlpha.ipa" },
+        "Feather": { bundle: "com.feather.app", link: "https://github.com/ipasoon/ipasoon-install/releases/download/3/Feather.ipa" }
+    };
+
+    const appImages = { 
+        "سينمانا": "https://www2.0zz0.com/2025/12/25/11/204694042.jpeg", 
+        "يوتيوب": "https://www2.0zz0.com/2025/12/28/15/256318616.jpeg",
+        "نتفلكس": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Netflix-new-icon.png",
+        "بيكرام": "https://www2.0zz0.com/2025/12/28/21/864850581.jpeg",
+        "هونستا": "https://www2.0zz0.com/2025/12/28/22/179651529.jpeg",
+        "تيك توك": "https://www2.0zz0.com/2025/12/28/22/589538278.jpeg",
+        "فودو": "https://www2.0zz0.com/2025/12/28/22/645629516.jpeg",
+        "قراند": "https://www2.0zz0.com/2025/12/28/22/681240281.jpeg",
+        "ماين كرافت": "https://www2.0zz0.com/2025/12/28/22/106976391.jpeg",
+        "انسايد": "https://www2.0zz0.com/2025/12/28/22/714533528.jpeg",
+        "فيسبوك": "https://www2.0zz0.com/2025/12/28/23/198835278.jpeg",
+        "لايتروم": "https://www2.0zz0.com/2025/12/28/23/534217254.jpeg",
+        "انمي كلاود": "https://www2.0zz0.com/2025/12/28/23/879855998.jpeg",
+        "كلاش": "https://www2.0zz0.com/2025/12/28/23/613304895.jpeg",
+        "هاي تي في": "https://www2.0zz0.com/2025/12/28/23/537680246.jpeg",
+        "بيكس ارت": "https://www2.0zz0.com/2025/12/28/23/725297760.jpeg",
+        "انمي سلاير": "https://www2.0zz0.com/2025/12/28/23/516533588.jpeg",
+        "اندلسي": "https://www2.0zz0.com/2025/12/28/23/356088430.jpeg",
+        "سويفت جرام": "https://www2.0zz0.com/2025/12/28/23/189189356.jpeg",
+        "فوتو روم": "https://www2.0zz0.com/2025/12/28/23/814821552.jpeg",
+        "تويتر": "https://www2.0zz0.com/2025/12/29/00/840437168.jpeg",
+        "كاب كات": "https://www2.0zz0.com/2025/12/29/00/994281572.jpeg",
+        "فيديو ستار": "https://www2.0zz0.com/2025/12/29/00/702646516.jpeg",
+        "ايساين": "https://www2.0zz0.com/2025/12/25/11/338282011.jpeg", 
+        "جي بوكس": "https://www2.0zz0.com/2025/12/25/11/185473269.png", 
+        "سكارلت": "https://www2.0zz0.com/2025/12/25/11/821110392.png", 
+        "الريشة": "https://www2.0zz0.com/2025/12/25/11/961966485.jpeg", 
+        "كيساين": "https://www2.0zz0.com/2025/12/25/13/709410933.jpeg", 
+        "الشهادة": "https://www2.0zz0.com/2025/12/25/11/612031286.jpeg" 
+    };
+    
+    const appsList = ["Cinemana", "YouTube", "Netflix", "Bikram", "Honista", "TikTok", "Vodu", "GTA", "Minecraft", "Inside", "Facebook", "Lightroom", "AnimeCloud", "Clash", "HiTV", "Picsart", "AnimeSlayer", "Andalusi", "Swiftgram", "Photoroom", "X", "CapCut", "VideoStar", "ESign", "KSign", "GBox", "Scarlet", "Feather"];
+
+    async function downloadCertZip(certKey, event) {
+        const cert = certs[certKey];
+        if (cert.zip) { window.location.href = cert.zip; return; }
+        const btn = event.target; btn.innerText = "...";
+        try {
+            const zip = new JSZip();
+            const password = "alikareemsafi";
+            const fetchFile = async (url) => { const response = await fetch(url); return await response.arrayBuffer(); };
+            const [p12Data, mpData] = await Promise.all([fetchFile(cert.p12), fetchFile(cert.mp)]);
+            zip.file(cert.name + ".p12", p12Data); zip.file(cert.name + ".mobileprovision", mpData);
+            zip.file("Password.txt", "Certificate Password: " + password);
+            const content = await zip.generateAsync({type: "blob"});
+            const link = document.createElement('a'); link.href = URL.createObjectURL(content); link.download = cert.name + "_Pack.zip"; link.click();
+        } catch (e) { alert("Please use Safari."); } finally { btn.innerText = translations[currentLang].download; }
+    }
+
+    async function handleInstall(appNameEng, certKey, event) {
+        const selectedApp = appData[appNameEng]; const selectedCert = certs[certKey];
+        const apiBase = "https://ipasoon.icu/js/d.php";
+        const requestUrl = `${apiBase}?ipalink=${encodeURIComponent(selectedApp.link)}&nameofapp=${appNameEng}&bundle=${selectedApp.bundle}&mplink=${encodeURIComponent(selectedCert.mp)}&P12link=${encodeURIComponent(selectedCert.p12)}&password=alikareemsafi`;
+        const btn = event.target; btn.innerText = "...";
+        try {
+            const response = await fetch(requestUrl); const data = await response.json();
+            if (data.status === "ok" && data.link) { 
+                window.location.href = data.link; 
+                setTimeout(() => { window.location.href = "https://t.me/ipasoon"; }, 2000); 
+            } else { throw new Error(); }
+        } catch (error) { window.open(requestUrl, '_blank'); } finally { btn.innerText = translations[currentLang].install; }
+    }
+
+    let currentLang = 'ar';
+    const translations = {
+        ar: { 
+            dnsBtn: "تثبيت DNS", dnsInfo: "يجب فتح الموقع في سفاري قبل ان تضغط على زر ال DNS", creatorName: "App Iraq", creatorSub: "المطور المعتمد لخدمات الشهادات الرسمية", install: "تثبيت", download: "تنزيل",
+            mainNote: "⚠️ <b>تنبيه هام:</b> إذا واجهت مشكلة في تشغيل التطبيقات بعد التثبيت، فهذا يعني أن جهازك مدرج ضمن القائمة السوداء. نوصيك بشراء <b>شهادة رسمية موثوقة</b> من المطور المعتمد.",
+            contactBtn: "تواصل معنا",
+            contactNote: "ملاحظة: المراسلة مخصصة فقط لمن يرغب في شراء شهادة رسمية، أي رسالة أخرى حول مواضيع مختلفة سيتم أرشفتها ولن يتم الرد عليها.",
+            cats: ['الكل', 'التطبيقات', 'ايساين', 'كيساين', 'جي بوكس', 'سكارلت', 'الريشة'], 
+            appNames: { "الشهادة": "ملف الشهادة", "سينمانا": "سينمانا", "يوتيوب": "يوتيوب بلس", "نتفلكس": "نتفلكس", "بيكرام": "بيكرام", "هونستا": "هونستا", "تيك توك": "تيك توك", "فودو": "فودو", "قراند": "GTA San Andreas", "ماين كرافت": "ماين كرافت", "انسايد": "Inside", "فيسبوك": "Facebook Glow", "لايتروم": "Lightroom", "انمي كلاود": "Anime Cloud", "كلاش": "Clash", "هاي تي في": "HiTV", "بيكس ارت": "Picsart", "انمي سلاير": "Anime Slayer", "اندلسي": "Andalusi", "سويفت جرام": "Swiftgram", "فوتو روم": "Photoroom", "تويتر": "تطبيق X", "كاب كات": "كاب كات", "فيديو ستار": "Video Star", "ايساين": "ايساين", "جي بوكس": "جي بوكس", "سكارلت": "سكارلت", "الريشة": "الريشة", "كيساين": "كيساين" } 
+        },
+        en: { 
+            dnsBtn: "Install DNS", dnsInfo: "Open in Safari before clicking the DNS button", creatorName: "App Iraq", creatorSub: "Official Certificate Authorized Developer", install: "Install", download: "Download",
+            mainNote: "⚠️ <b>Warning:</b> If apps fail to launch after installation, your device is Blacklisted. To fix this, we recommend purchasing an <b>Official Certificate</b> from our developer.",
+            contactBtn: "Contact Us",
+            contactNote: "Note: Messaging is for certificate purchases only. Other topics will be archived and ignored.",
+            cats: ['All', 'Apps', 'E-Sign', 'KSign', 'GBox', 'Scarlet', 'Feather'], 
+            appNames: { "الشهادة": "Cert File", "سينمانا": "Cinemana", "يوتيوب": "YouTube Plus", "نتفلكس": "Netflix", "بيكرام": "Bikram", "هونستا": "Honista", "تيك توك": "TikTok", "فودو": "Vodu", "قراند": "GTA San Andreas", "ماين كرافت": "Minecraft", "انسايد": "Inside", "فيسبوك": "Facebook Glow", "لايتروم": "Lightroom", "انمي كلاود": "Anime Cloud", "كلاش": "Clash", "هاي تي في": "HiTV", "بيكس ارت": "Picsart", "انمي سلاير": "Anime Slayer", "اندلسي": "Andalusi", "سويفت جرام": "Swiftgram", "فوتو روم": "Photoroom", "تويتر": "X App", "كاب كات": "CapCut", "فيديو ستار": "Video Star", "ايساين": "E-Sign", "جي بوكس": "GBox", "سكارلت": "Scarlet", "الريشة": "Feather", "كيساين": "KSign" } 
+        }
+    };
+
+    function setLang(lang) {
+        currentLang = lang; document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+        document.getElementById('dns-btn').innerText = translations[lang].dnsBtn;
+        document.getElementById('dns-info').innerText = translations[lang].dnsInfo;
+        document.getElementById('creator-name').innerText = translations[lang].creatorName;
+        document.getElementById('creator-sub').innerText = translations[lang].creatorSub;
+        document.getElementById('main-note').innerHTML = translations[lang].mainNote;
+        document.getElementById('contact-text').innerText = translations[lang].contactBtn;
+        document.getElementById('contact-note').innerText = translations[lang].contactNote;
+        renderTabs(); showApps(translations[lang].cats[0]);
+    }
+
+    function renderTabs() {
+        const container = document.getElementById('tabs-container'); container.innerHTML = '';
+        translations[currentLang].cats.forEach((cat, i) => {
+            const div = document.createElement('div'); div.className = `tab ${i === 0 ? 'active' : ''}`;
+            div.innerText = cat; div.onclick = () => showApps(cat, div); container.appendChild(div);
+        });
+    }
+
+    function createCertHTML(certKey) {
+        return `<div class="app"><div style="display:flex;align-items:center;gap:12px;"><div class="app-icon" style="background-image: url('${appImages["الشهادة"]}')"></div><div>${certs[certKey].name} Pack</div></div><button onclick="downloadCertZip('${certKey}', event)" class="install">${translations[currentLang].download}</button></div>`;
+    }
+
+    function createAppHTML(nameAr, engName, certKey) {
+        return `<div class="app"><div style="display:flex;align-items:center;gap:12px;"><div class="app-icon" style="background-image: url('${appImages[nameAr]}')"></div><div>${translations[currentLang].appNames[nameAr]}</div></div><button onclick="handleInstall('${engName}', '${certKey}', event)" class="install">${translations[currentLang].install}</button></div>`;
+    }
+
+    function showApps(category, el) {
+        if(el) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+        const store = document.getElementById('store'); store.innerHTML = '';
+        
+        const keysAr = ["سينمانا", "يوتيوب", "نتفلكس", "بيكرام", "هونستا", "تيك توك", "فودو", "قراند", "ماين كرافت", "انسايد", "فيسبوك", "لايتروم", "انمي كلاود", "كلاش", "هاي تي في", "بيكس ارت", "انمي سلاير", "اندلسي", "سويفت جرام", "فوتو روم", "تويتر", "كاب كات", "فيديو ستار", "ايساين", "كيساين", "جي بوكس", "سكارلت", "الريشة"];
+        
+        const groupConfigs = [
+            { key: 'on', label: 'Commission.on' }, { key: 'education', label: 'Education' },
+            { key: 'chiba', label: 'Chiba' }, { key: 'central', label: 'Central' },
+            { key: 'estate', label: 'Estate' }, { key: 'esensoft', label: 'Esensoft' },
+            { key: 'eryuan', label: 'Eryuan' }, { key: 'takeoff', label: 'Takeoff' },
+            { key: 'hdfc', label: 'HDFC' }, { key: 'toyota', label: 'Toyota' },
+            { key: 'tianjin', label: 'Tianjin' }, { key: 'tcl', label: 'TCL' },
+            { key: 'viettel', label: 'Viettel' }, { key: 'vietnamtech', label: 'VietnamTech' },
+            { key: 'vietnambank', label: 'VietnamBank' }, { key: 'wuling', label: 'Wuling' }
+        ];
+
+        groupConfigs.forEach(config => {
+            let appsHTML = '';
+            let hasContent = false;
+            let showPack = true;
+
+            keysAr.forEach((keyAr, i) => {
+                const isSpecialApp = (keyAr === "سينمانا" || keyAr === "يوتيوب" || keyAr === "نتفلكس" || keyAr === "بيكرام" || keyAr === "هونستا" || keyAr === "تيك توك" || keyAr === "فودو" || keyAr === "قراند" || keyAr === "ماين كرافت" || keyAr === "انسايد" || keyAr === "فيسبوك" || keyAr === "لايتروم" || keyAr === "انمي كلاود" || keyAr === "كلاش" || keyAr === "هاي تي في" || keyAr === "بيكس ارت" || keyAr === "انمي سلاير" || keyAr === "اندلسي" || keyAr === "سويفت جرام" || keyAr === "فوتو روم" || keyAr === "تويتر" || keyAr === "كاب كات" || keyAr === "فيديو ستار");
+                
+                if (category === translations[currentLang].cats[0]) {
+                    if (!isSpecialApp) {
+                        appsHTML += createAppHTML(keyAr, appsList[i], config.key);
+                    }
+                    hasContent = true;
+                    showPack = true;
+                } else if (category === translations[currentLang].cats[1]) {
+                    if (isSpecialApp) {
+                        appsHTML += createAppHTML(keyAr, appsList[i], config.key);
+                        hasContent = true;
+                        showPack = false;
+                    }
+                } else if (category === translations[currentLang].appNames[keyAr]) {
+                        appsHTML += createAppHTML(keyAr, appsList[i], config.key);
+                        hasContent = true;
+                        showPack = true;
+                }
+            });
+
+            if(hasContent) {
+                const sep = document.createElement('div');
+                sep.className = 'cert-separator';
+                sep.innerHTML = `<span class="cert-title-glow">${config.label}</span>`;
+                store.appendChild(sep);
+                const gDiv = document.createElement('div');
+                gDiv.className = `signed-group`;
+                
+                let groupInner = "";
+                if (showPack) { groupInner += createCertHTML(config.key); }
+                groupInner += appsHTML;
+                
+                gDiv.innerHTML = groupInner;
+                store.appendChild(gDiv);
+            }
+        });
+    }
+
+    setLang('ar');
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 40; i++) {
+        const star = document.createElement('div'); star.className = 'star';
+        star.style.width = Math.random() * 2 + 'px'; star.style.height = star.style.width;
+        star.style.top = Math.random() * 100 + '%'; star.style.left = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's'); starsContainer.appendChild(star);
+    }
+</script>
+</body>
+</html>
